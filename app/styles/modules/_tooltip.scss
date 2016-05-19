@@ -15,6 +15,9 @@
     right: 3px;
   }
 
+  a {
+    color: $message-text-color;
+  }
 
   /* tooltip caret */
   &:before,
@@ -66,6 +69,18 @@
     }
   }
 
+  &.tooltip-warning {
+    background: $warning-background-color;
+
+    &:before,
+    &::before {
+      background-color: $warning-background-color;
+    }
+
+    a {
+      text-decoration: underline;
+    }
+  }
 
   @include respond-to('trustedUI') {
     font-size: $small-font;

@@ -137,7 +137,6 @@ define(function (require, exports, module) {
 
     events: {
       'blur input.email': 'onEmailBlur',
-      'blur input.password': 'onPasswordBlur',
       'click #amo-migration a': 'onAmoSignIn'
     },
 
@@ -310,11 +309,6 @@ define(function (require, exports, module) {
 
       // re-throw error, it will be handled at a lower level.
       throw err;
-    },
-
-    onPasswordBlur: function () {
-      var password = this.getElementValue('.password');
-      this.checkPasswordStrength(password);
     },
 
     onEmailBlur: function () {

@@ -9,8 +9,10 @@ define(function (require, exports, module) {
   var p = require('lib/promise');
   var requireOnDemand = require('lib/require-on-demand');
   var Url = require('lib/url');
+  var PasswordPromptMixin = require('views/mixins/password-prompt-mixin');
 
   var PasswordStrengthMixin = {
+
     initialize: function (options) {
       this._able = options.able;
     },
@@ -82,6 +84,7 @@ define(function (require, exports, module) {
             if (passwordCheckStatus === 'BLOOMFILTER_HIT' ||
                 passwordCheckStatus === 'BLOOMFILTER_MISS') {
               self._logStrengthExperimentEvent('bloomfilter_used');
+              self.displayPasswordWarningPrompt();
             }
             self._logStrengthExperimentEvent(passwordCheckStatus);
 
@@ -96,5 +99,5 @@ define(function (require, exports, module) {
       this.logViewEvent(eventName);
     }
   };
-  module.exports = PasswordStrengthMixin;
+  module.exports = _.extend(PasswordStrengthMixin, PasswordPromptMixin);
 });

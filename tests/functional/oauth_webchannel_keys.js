@@ -212,6 +212,7 @@ define([
         })
         .end()
 
+
         .closeCurrentWindow()
         // switch to the original window
         .switchToWindow('')
@@ -299,11 +300,12 @@ define([
         .then(type('#password', PASSWORD))
         .then(click('button[type=submit]'))
 
-        // user is signed in
-        .then(testIsBrowserNotifiedOfLogin(this, { shouldCloseTab: true }))
+        // User must verify the signin because they are requesting keys
+        .then(testElementExists('#fxa-confirm-signin-header'))
+        .then(openVerificationLinkDifferentBrowser(email, 2))
 
-        // no screen transition, Loop will close this screen.
-        .then(testElementExists('#fxa-signin-header'));
+        // user is signed in
+        .then(testIsBrowserNotifiedOfLogin(this, { shouldCloseTab: true }));
     },
 
     'signin a verified account and requesting keys after signing in to sync': function () {
@@ -317,7 +319,10 @@ define([
         .execute(listenForSyncCommands)
 
         .then(fillOutSignIn(this, email, PASSWORD))
-        .then(testIsBrowserNotifiedOfSyncLogin(this, email, { checkVerified: true }))
+        .then(testIsBrowserNotifiedOfSyncLogin(this, email, { checkVerified: false }))
+        // User must verify the Sync signin
+        .then(testElementExists('#fxa-confirm-signin-header'))
+        .then(openVerificationLinkDifferentBrowser(email, 1))
 
         .then(openFxaFromRp('signin'))
         .then(testElementExists('#fxa-signin-header'))
@@ -326,8 +331,12 @@ define([
         // to derive the keys, this flow must prompt for it.
         .then(type('input[type=password]', PASSWORD))
         .then(click('button[type="submit"]'))
+
+        // User must verify the signin because they are requesting keys
+        .then(testElementExists('#fxa-confirm-signin-header'))
+
+        .then(openVerificationLinkDifferentBrowser(email, 2))
         .then(testIsBrowserNotifiedOfLogin(this, { shouldCloseTab: true }));
     }
   });
-
 });

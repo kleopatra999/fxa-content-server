@@ -132,7 +132,7 @@ define([
         .findByCssSelector('.device:nth-child(1) .device-name')
           .getVisibleText()
           .then(function (val) {
-            assert.equal(val, BROWSER_DEVICE_NAME + ' (current)', 'device name is correct');
+            assert.equal(val, BROWSER_DEVICE_NAME, 'device name is correct');
           })
         .end()
 
@@ -144,6 +144,14 @@ define([
             TEST_DEVICE_NAME_UPDATED
           );
         })
+
+        // current device has the text `current device`
+        .findByCssSelector('.device:nth-child(1) .device-name + .device-current')
+          .getVisibleText()
+          .then(function (val) {
+            assert.equal(val, 'current device', 'current device is correct');
+          })
+        .end()
 
         // external update should show in the device list
         .findByCssSelector('.devices-refresh')

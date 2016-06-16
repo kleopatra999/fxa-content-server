@@ -10,6 +10,7 @@ define(function (require, exports, module) {
 
   var $ = require('jquery');
   var BaseView = require('views/base');
+  var KeyCodes = require('lib/key-codes');
 
   module.exports = {
     initialize: function (options) {
@@ -17,7 +18,22 @@ define(function (require, exports, module) {
     },
     events: {
       'click .cancel': BaseView.preventDefaultThen('_closePanelReturnToSettings'),
-      'click .settings-unit-toggle': BaseView.preventDefaultThen('_triggerPanel')
+      'click .settings-unit-toggle': BaseView.preventDefaultThen('_triggerPanel'),
+      'keyup .settings-unit': 'onKeyUp'
+    },
+
+    onKeyUp: function (event) {
+      this._hidePanelOnEscape(event.which);
+    },
+
+    _hidePanelOnEscape: function (keyCode) {
+      if (keyCode === KeyCodes.ESCAPE) {
+        this.hidePanel();
+      }
+    },
+
+    hidePanel: function () {
+      this._closePanelReturnToSettings();
     },
 
     _triggerPanel: function (event) {
@@ -29,6 +45,17 @@ define(function (require, exports, module) {
 
     openPanel: function () {
       this.$('.settings-unit').addClass('open');
+      var $input = this.$('.open input:first-of-type');
+      if ($input.length > 0) {
+        // if there's an input element, focus that
+        this.focus($input[0]);
+      } else {
+        // else check if there's a button element and focus that instead
+        var $button = this.$('.open button.primary');
+        if ($button.length > 0) {
+          this.focus($button[0]);
+        }
+      }
     },
 
     isPanelOpen: function () {

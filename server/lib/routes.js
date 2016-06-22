@@ -84,7 +84,7 @@ module.exports = function (config, i18n) {
       // Compile ES2015 scripts to ES5 before serving to the client.
       app.get('/scripts/*\.(js|map)', babel({
         babelOptions: {
-          presets: ['es2015-nostrict'],
+          presets: ['babel-preset-es2015-nostrict'],
           sourceMaps: true
         },
         debug: false,
